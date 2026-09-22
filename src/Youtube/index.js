@@ -1,0 +1,74 @@
+import v1 from './v1.js'
+import v2 from './v2.js'
+import { search, getVideo, getId, formatBytes, formatDuration } from './search.js'
+
+const providers = [v1, v2]
+
+async function download(input, options = {}) {
+  const controllers = providers.map(() => new AbortController())
+  const signal = options.signal
+
+  if (signal?.aborted) throw signal.reason ?? new DOMException('Aborted', 'AbortError')
+
+  const abortAll = () => controllers.forEach(controller => controller.abort(signal?.reason))
+  signal?.addEventListener('abort', abortAll, { once: true })
+
+  const run = async (provider, index) => {
+    const result = await provider.download(input, { ...options, signal: controllers[index].signal })
+    if (!validDownload(result)) throw new Error(`v${index + 1} returned an invalid response`)
+    return { ...result, provider: `v${index + 1}`, _winner: index }
+  }
+
+  try {
+    const result = await Promise.any(providers.map(run))
+    controllers.forEach((controller, index) => index !== result._winner && controller.abort())
+    const { _winner, ...clean } = result
+    return clean
+  } catch (error) {
+    if (signal?.aborted) throw signal.reason ?? error
+
+    if (error instanceof AggregateError) {
+      throw new Error(
+        `All YouTube providers failed: ${error.errors
+          .map(error => error?.message ?? String(error))
+          .join(' | ')}`
+      )
+    }
+
+    throw error
+  } finally {
+    signal?.removeEventListener('abort', abortAll)
+  }
+}
+
+function validDownload(result) {
+  if (!result || typeof result !== 'object' || typeof result.url !== 'string') return false
+
+  try {
+    return ['http:', 'https:'].includes(new URL(result.url).protocol)
+  } catch {
+    return false
+  }
+}
+
+export {
+  download,
+  search,
+  getVideo,
+  getId,
+  formatBytes,
+  formatDuration,
+  v1,
+  v2
+}
+
+export default {
+  download,
+  search,
+  getVideo,
+  getId,
+  formatBytes,
+  formatDuration,
+  v1,
+  v2
+}
