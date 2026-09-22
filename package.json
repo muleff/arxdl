@@ -1,18 +1,35 @@
 {
   "name": "arxdl",
   "version": "1.0.0",
-  "description": "Simple YouTube downloader for Node.js",
+  "description": "Simple media downloader for Node.js",
   "type": "module",
   "main": "./src/index.js",
   "exports": {
     ".": "./src/index.js",
-    "./v1": "./src/v1.js",
-    "./v2": "./src/v2.js"
+    "./youtube": "./src/Youtube/index.js",
+    "./youtube/v1": "./src/Youtube/v1.js",
+    "./youtube/v2": "./src/Youtube/v2.js",
+    "./tiktok": "./src/TikTok/index.js",
+    "./tiktok/v1": "./src/TikTok/v1.js",
+    "./tiktok/v2": "./src/TikTok/v2.js",
+    "./tiktok/v3": "./src/TikTok/v3.js"
   },
   "files": ["src"],
-  "keywords": ["youtube", "downloader", "youtube-downloader"],
+  "keywords": [
+    "downloader",
+    "youtube",
+    "tiktok",
+    "video",
+    "audio",
+    "media-downloader"
+  ],
   "license": "MIT",
   "engines": {
     "node": ">=20"
+  },
+  "dependencies": {
+    "axios": "^1.12.2",
+    "cheerio": "^1.1.2",
+    "got-scraping": "^4.1.2"
   }
 }
