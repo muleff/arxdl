@@ -1,9 +1,1 @@
-import youtube from './Youtube/index.js'
-import tiktok from './TikTok/index.js'
-
-export { youtube, tiktok }
-
-export default {
-  youtube,
-  tiktok
-}
+import o from"./Youtube/index.js";import t from"./TikTok/index.js";export{o as youtube,t as tiktok};export default{youtube:o,tiktok:t};

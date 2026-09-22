@@ -4,6 +4,9 @@
   "description": "Simple media downloader for Node.js",
   "type": "module",
   "main": "./src/index.js",
+  "scripts": {
+    "test": "node --test"
+  },
   "exports": {
     ".": "./src/index.js",
     "./youtube": "./src/Youtube/index.js",
@@ -14,7 +17,9 @@
     "./tiktok/v2": "./src/TikTok/v2.js",
     "./tiktok/v3": "./src/TikTok/v3.js"
   },
-  "files": ["src"],
+  "files": [
+    "src"
+  ],
   "keywords": [
     "downloader",
     "youtube",
@@ -28,8 +33,7 @@
     "node": ">=20"
   },
   "dependencies": {
-    "axios": "^1.12.2",
-    "cheerio": "^1.1.2",
-    "got-scraping": "^4.1.2"
+    "impit": "^0.14.5",
+    "xbogus": "^1.0.2"
   }
 }
