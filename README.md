@@ -21,4 +21,3 @@ delete headers.__impersonate
 await fetch(tiktok.datos.url, { headers })
 ```
 
-Available entry points: `arxdl`, `arxdl/youtube`, `arxdl/youtube/v1`, `arxdl/youtube/v2`, `arxdl/tiktok`, `arxdl/tiktok/v1`, `arxdl/tiktok/v2`, and `arxdl/tiktok/v3`.
