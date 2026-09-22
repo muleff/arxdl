@@ -1,6 +1,7 @@
 import v1 from './v1.js'
 import v2 from './v2.js'
 import v3 from './v3.js'
+import { search, sessionCookie, downloadHeaders } from './search.js'
 
 const providers = [v1, v2, v3]
 
@@ -10,7 +11,7 @@ async function download(input, options = {}) {
 
   if (signal?.aborted) throw signal.reason ?? new DOMException('Aborted', 'AbortError')
 
-  const abortAll = () => controllers.forEach(x => x.abort(signal?.reason))
+  const abortAll = () => controllers.forEach(controller => controller.abort(signal?.reason))
   signal?.addEventListener('abort', abortAll, { once: true })
 
   const run = async (provider, index) => {
@@ -26,11 +27,9 @@ async function download(input, options = {}) {
     return clean
   } catch (error) {
     if (signal?.aborted) throw signal.reason ?? error
-
     if (error instanceof AggregateError) {
-      throw new Error(`All TikTok providers failed: ${error.errors.map(x => x?.message ?? String(x)).join(' | ')}`)
+      throw new Error(`All TikTok providers failed: ${error.errors.map(error => error?.message ?? error).join(' | ')}`)
     }
-
     throw error
   } finally {
     signal?.removeEventListener('abort', abortAll)
@@ -46,5 +45,5 @@ function valid(result) {
   }
 }
 
-export { download, v1, v2, v3 }
-export default { download, v1, v2, v3 }
+export { download, search, sessionCookie, downloadHeaders, v1, v2, v3 }
+export default { download, search, sessionCookie, downloadHeaders, v1, v2, v3 }
